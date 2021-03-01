@@ -1,0 +1,26 @@
+{
+    "name": "jd shield firmware",
+    "description": "",
+    "dependencies": {
+        "nucleo-f411re": "*"
+    },
+    "files": [
+        "main.ts",
+        "README.md"
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "targetVersions": {
+        "branch": "v0.13.12",
+        "tag": "v0.13.12",
+        "commits": "https://github.com/microsoft/pxt-maker/commits/54a34c774ed582a325caf4448acc34a91d68cc86",
+        "target": "0.14.10",
+        "pxt": "5.34.19",
+        "targetId": "maker"
+    },
+    "supportedTargets": [
+        "maker"
+    ],
+    "preferredEditor": "tsprj"
+}
