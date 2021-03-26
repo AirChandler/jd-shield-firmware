@@ -30,17 +30,7 @@ let n = 0
 
 //% shim=pxt::getPin
 declare function internalGetPin(id: number): PwmPin;
-
-forever(() => {
-    control.dmesg("fr:" + n++)
-    pins.B3.digitalWrite(true)
-    pause(1000)
-    pins.B3.digitalWrite(false)
-    pause(1000)
-})
-
-const spi = pins.createSlaveSPI(pins.A7, pins.A6, pins.A5, pins.A4)
-
+let spi = pins.createSlaveSPI(pins.A7, pins.A6, pins.A5, pins.A4)
 const sendQ: Buffer[] = []
 const buttons: DigitalInOutPin[] = [
     pins.A0, // menu
@@ -92,12 +82,27 @@ function handleCmd(b: Buffer) {
     }
 }
 
+forever(() => {
+    pins.B3.digitalWrite(true)
+    pause(100)
+    pins.B3.digitalWrite(false)
+    pause(100)
+    
+})
+
 control.runInParallel(function () {
+    //Indicate JACDAC bus in use
+    pins.B14.digitalWrite(true)
     while (true) {
-        let sendB = sendQ.shift()
-        if (!sendB) sendB = control.createBuffer(4)
-        let recvB = control.createBuffer(4)
-        spi.transfer(sendB, recvB)
-        handleCmd(recvB)
+        try{
+            let sendB = sendQ.shift()
+            if (!sendB) sendB = control.createBuffer(4)
+            let recvB = control.createBuffer(4)
+            spi.transfer(sendB, recvB)
+            handleCmd(recvB)
+        } catch(ex){
+            //errr
+            control.dmesg("err:" + ex)
+        }
     }
 })
